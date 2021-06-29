@@ -11,7 +11,7 @@ export default function CreateRoomPage() {
       return;
     }
 
-    const query = `/chat?name=${name}&room=#abc123`;
+    const query = `/chat?name=${name}&room=%23abc123`;
     history.push(query);
   }
 
