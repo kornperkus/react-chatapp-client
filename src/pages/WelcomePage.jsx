@@ -12,7 +12,13 @@ export default function WelcomePage() {
       return;
     }
 
-    const query = `/chat?name=${name}&room=${room}`;
+    let query;
+    if (room.search("#") === -1) {
+      query = `/chat?name=${name}&room=%23${room}`;
+    } else {
+      query = `/chat?name=${name}&room=%23${room.substring(1)}`;
+    }
+
     history.push(query);
   }
 
@@ -31,7 +37,7 @@ export default function WelcomePage() {
         />
         <input
           type="text"
-          placeholder="Room #CODE"
+          placeholder="#CODE"
           autoComplete="off"
           className="w-5/6 md:w-3/6 rounded p-2 mb-5"
           onChange={(e) => setRoom(e.target.value)}

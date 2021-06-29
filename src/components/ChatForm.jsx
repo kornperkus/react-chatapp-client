@@ -6,6 +6,8 @@ export default function ChatForm({ onSubmit }) {
   function onSubmitForm(e) {
     e.preventDefault();
     onSubmit(message);
+
+    setMessage("");
   }
 
   return (
@@ -15,6 +17,7 @@ export default function ChatForm({ onSubmit }) {
         placeholder="Say something..."
         className="flex-grow py-1 px-2"
         onChange={(e) => setMessage(e.target.value)}
+        value={message}
       />
       <input
         type="submit"

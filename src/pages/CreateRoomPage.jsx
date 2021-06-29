@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 export default function CreateRoomPage() {
   const history = useHistory();
   const [name, setName] = useState("");
+  const [room, setRoom] = useState("");
+
+  useEffect(() => {
+    setRoom(getRoomCode());
+  }, []);
 
   function submitForm(e) {
     if (!name) {
@@ -11,8 +16,16 @@ export default function CreateRoomPage() {
       return;
     }
 
-    const query = `/chat?name=${name}&room=%23abc123`;
+    const query = `/chat?name=${name}&room=%23${room}`;
     history.push(query);
+  }
+
+  function getRoomCode() {
+    let code = "";
+    for (let i = 0; i < 6; i++) {
+      code += Math.floor(Math.random() * 10);
+    }
+    return code;
   }
 
   return (
@@ -25,8 +38,16 @@ export default function CreateRoomPage() {
           type="text"
           placeholder="Name"
           autoComplete="off"
-          className="w-5/6 md:w-3/6 rounded p-2 mb-5"
+          className="w-5/6 md:w-3/6 rounded p-2 mb-3"
           onChange={(e) => setName(e.target.value)}
+          value={name}
+        />
+        <input
+          type="text"
+          placeholder="Room #CODE"
+          className="w-5/6 md:w-3/6 rounded p-2 mb-5 text-gray-700"
+          disabled="true"
+          value={`#${room}`}
         />
         <input
           type="submit"

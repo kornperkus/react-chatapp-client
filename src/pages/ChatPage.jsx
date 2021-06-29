@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import queryString from "query-string";
 import { useHistory } from "react-router";
@@ -30,12 +30,16 @@ export default function ChatPage() {
     socket.on("message", (message) => {
       console.log(message);
       setMessages((state) => [...state, message]);
+      scrollBottom();
     });
   }
 
   function disconnect() {
     console.log("Chat: Disconnecting...");
-    if (socket) socket.disconnect();
+    if (socket) {
+      socket.emit("leave", user.room);
+      socket.disconnect();
+    }
   }
 
   function sendMessage(message) {
@@ -49,6 +53,11 @@ export default function ChatPage() {
 
   function isSelf(id) {
     return id === socket.id;
+  }
+
+  const bottom = useRef(null);
+  function scrollBottom() {
+    bottom.current?.scrollIntoView({ nehavior: "smooth" });
   }
 
   return (
@@ -72,6 +81,7 @@ export default function ChatPage() {
       </div>
 
       <ChatForm onSubmit={sendMessage} />
+      <div ref={bottom} />
     </div>
   );
 }
